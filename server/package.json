@@ -1,0 +1,30 @@
+{
+  "name": "webputty",
+  "version": "1.0.0",
+  "description": "web ssh terminal with termjs &amp; ssh2 library",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bin/www",
+    "dev": "nodemon bin/www --ignore src/frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Songsungeun/webputty.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Songsungeun/webputty/issues"
+  },
+  "homepage": "https://github.com/Songsungeun/webputty#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-middleware": "^3.7.2"
+  }
+}
