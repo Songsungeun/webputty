@@ -1,7 +1,7 @@
 // ANCHOR - Init Variable
 const webpack = require('webpack');
 const path = require('path');
-const compiler = webpack(require(path.resolve(__dirname, '../webpack.config.js')));
+const compiler = webpack(require(path.resolve(__dirname, '../../webpack.config.js')));
 const middleware = require('webpack-dev-middleware');
 const express = require('express');
 const app = express();
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../public/index.html'))
+    res.sendFile(path.resolve(__dirname, '../../public/index.html'))
 })
 
 module.exports = app;

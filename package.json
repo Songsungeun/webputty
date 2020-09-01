@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/Songsungeun/webputty#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "xterm": "^4.8.1",
+    "xterm-addon-fit": "^0.4.0"
   },
   "devDependencies": {
+    "css-loader": "^4.2.2",
     "nodemon": "^2.0.4",
+    "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.2"
