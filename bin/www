@@ -1,3 +1,10 @@
 const app = require('../src/server/index.js')
+const http = require('http');
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
-app.listen(3000, () => console.log('Server Start Port:3000'));
+server.listen(3000, () => console.log('Server Start Port:3000'));
+
+io.on('connection', (socket) => {
+
+})
