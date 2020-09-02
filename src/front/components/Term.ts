@@ -1,6 +1,7 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import '../css/term.css';
+import { Socket } from 'socket.io-client';
 
 export default class Term {
     section = document.createElement('section');
@@ -12,15 +13,31 @@ export default class Term {
     }
 
     render() {
+        const term = this.openTerminal();
+        this.initTerminal(term);
+        const socket = this.openSocket();
+    }
+
+    openTerminal() {
         const terminal = new Terminal();
         const fitAddon = new FitAddon();
         terminal.loadAddon(fitAddon);
         terminal.open(this.section);
         fitAddon.fit();
-        this.setSocket();
+        return terminal;
     }
 
-    setSocket() {
+    initTerminal(term: Terminal) {
+        term.writeln('Welcome to Web Putty!');
+        term.writeln('');
+    }
+
+    addEventtoTerminal(term: Terminal) {
+
+    }
+
+    openSocket() {
         const socket: SocketIOClient.Socket = io();
+        return socket;
     }
 }
