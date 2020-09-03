@@ -11,6 +11,7 @@ export default class Term {
     private pw: string = '';
     account: string = '';
     backSpackLimit: number = 0;
+    status: TypingType = TypingType.ACCOUNT;
 
     constructor(target: HTMLElement) {
         this.section.className = 'term_area';
@@ -66,7 +67,19 @@ export default class Term {
                     term.write('\b \b');
                 }
             }
-            term.write(key);
+            // TODO - key 별 동작 분기 처리
+            switch (this.status) {
+                case TypingType.ACCOUNT:
+                    this.account += key;
+                    term.write(key);
+                    break;
+                case TypingType.PASSWORD:
+                    this.pw += key;
+                    break;
+                default:
+                    term.write(key);
+            }
+
         })
     }
 
@@ -87,3 +100,9 @@ export default class Term {
     }
 }
 // !SECTION
+
+enum TypingType {
+    ACCOUNT,
+    PASSWORD,
+    DATA
+}
