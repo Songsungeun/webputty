@@ -2,16 +2,13 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import '../css/term.css';
 import { Socket } from 'socket.io-client';
+import EventList from '../utils/EventList';
 
 // SECTION - Terminal
 export default class Term {
     section = document.createElement('section');
     private _term: Terminal | null = null;
-    private _sock: SocketIOClient.Socket | null = null;
-    private pw: string = '';
-    account: string = '';
-    backSpackLimit: number = 0;
-    status: TypingType = TypingType.ACCOUNT;
+    eventList = new EventList();
 
     constructor(target: HTMLElement) {
         this.section.className = 'term_area';
@@ -34,14 +31,6 @@ export default class Term {
         return this._term as Terminal;
     }
 
-    setSocket(sock: SocketIOClient.Socket) {
-        this._sock = sock;
-    }
-
-    getSocket() {
-        return this._sock;
-    }
-
     // NOTE - Func for Terminal
     openTerminal() {
         const terminal = new Terminal();
@@ -58,51 +47,24 @@ export default class Term {
         term.writeln('');
     }
 
-    addEventToTerminal() {
+    addEvent() {
         let term = this.getTerm();
+        this.eventList.termEvent.setOnKey(term);
 
-        let onKey = term.onKey(({ key }) => {
-            if (key === '\u007F') {
-                if (term.buffer.active.cursorX > this.backSpackLimit) {
-                    term.write('\b \b');
-                }
-            }
-            // TODO - key 별 동작 분기 처리
-            switch (this.status) {
-                case TypingType.ACCOUNT:
-                    this.account += key;
-                    term.write(key);
-                    break;
-                case TypingType.PASSWORD:
-                    this.pw += key;
-                    break;
-                default:
-                    term.write(key);
-            }
 
-        })
+
     }
 
     readyToConnect(ip: String) {
         let term = this.getTerm();
         let AccountTermString: string = 'Login as: ';
-        this.backSpackLimit = AccountTermString.length;
+        this.backSpaceLimit = AccountTermString.length;
 
         term.writeln(`connect to ${ip}`);
         term.write(AccountTermString);
-        this.addEventToTerminal();
+        this.addEvent();
     }
 
-    // NOTE - Func for SOCKET
-    openSocket() {
-        const socket: SocketIOClient.Socket = io();
-        this.setSocket(socket);
-    }
+
 }
 // !SECTION
-
-enum TypingType {
-    ACCOUNT,
-    PASSWORD,
-    DATA
-}
