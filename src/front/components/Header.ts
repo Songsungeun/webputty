@@ -1,9 +1,11 @@
+import { DataManagement } from "../data/DataManagement";
+
 // SECTION - Header
 export default class Header {
     section = document.createElement('header');
     onClick: Function
 
-    constructor({ target, onClick }: { target: HTMLElement, onClick: Function }) {
+    constructor({ target, dataState, onClick }: { target: HTMLElement, dataState: DataManagement, onClick: Function }) {
         this.section.className = 'header';
         this.onClick = onClick;
         target.appendChild(this.section);

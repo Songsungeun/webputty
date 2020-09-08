@@ -5,3 +5,4 @@ commit message emoji
 setting: ⚒
 fix: 🔨
 Add: 📑
+Refact: 📚

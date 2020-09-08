@@ -2,9 +2,14 @@ const app = require('../src/server/index.js')
 const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const ssh = require('../src/server/ssh').ssh;
 
 server.listen(3000, () => console.log('Server Start Port:3000'));
 
 io.on('connection', (socket) => {
-
+    socket.on('req_auth', async ({ id, ip, pw }) => {
+        console.log('req auth');
+        const client = await ssh.connect(id, ip, pw);
+        console.log('test');
+    })
 })

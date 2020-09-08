@@ -1,12 +1,16 @@
 import { IDisposable, Terminal } from "xterm";
 import { TypingType, DataManagement } from "../data/DataManagement";
 
-const data: DataManagement = new DataManagement();
+let data: DataManagement;
 
 // SECTION - EventList
 export default class EventList {
 
+    constructor(dataState: DataManagement) {
+        data = dataState;
+    }
     termEvent = new TerminalEvent();
+    sockEvent = new SockEvent();
 
 }
 
@@ -24,7 +28,7 @@ class TerminalEvent {
         return this._pw;
     }
 
-    setOnKey(term: Terminal) {
+    setOnKey(term: Terminal, sock: SocketIOClient.Socket) {
         this.termOnKey = term.onKey(({ key, domEvent }) => {
 
             if (key === '\u007F') {
@@ -33,11 +37,17 @@ class TerminalEvent {
                 }
             }
             if (domEvent.key === 'Enter') {
+                console.log(data.typingState);
                 if (data.typingState === TypingType.ACCOUNT) {
                     data.typingState = TypingType.PASSWORD;
+                    term.writeln('');
+                    term.write('Password: ')
+                    return;
                 }
-                if (data.typingState === TypingType.PASSWORD) {
 
+                if (data.typingState === TypingType.PASSWORD) {
+                    console.log(data.ip, this._account, this._pw);
+                    sock.emit('req_auth', { id: this._account, ip: data.ip, pw: this._pw });
                 }
             }
 
@@ -58,15 +68,24 @@ class TerminalEvent {
 }
 
 // ANCHOR - Socket Event
-class sockEvent {
-    private _socket: SocketIOClient.Socket = io();
+class SockEvent {
+    private _socket: SocketIOClient.Socket | null = null;
 
     get socket(): SocketIOClient.Socket {
+        if (!this._socket) throw new Error('socket is not opened');
         return this._socket;
+    }
+    set socket(sock: SocketIOClient.Socket) {
+        this._socket = sock;
     }
 
     openSocket() {
+        this.socket = io();
+    }
 
+    addEvent(evName: string, action: (data: any) => {}) {
+        if (!this._socket) throw new Error('socket is not opened');
+        this._socket.on(evName, action);
     }
 }
 

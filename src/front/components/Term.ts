@@ -3,21 +3,26 @@ import { FitAddon } from 'xterm-addon-fit';
 import '../css/term.css';
 import { Socket } from 'socket.io-client';
 import EventList from '../utils/EventList';
+import { DataManagement } from '../data/DataManagement';
 
 // SECTION - Terminal
 export default class Term {
     section = document.createElement('section');
     private _term: Terminal | null = null;
-    eventList = new EventList();
+    eventList: EventList;
+    dState: DataManagement;
 
-    constructor(target: HTMLElement) {
+    constructor({ target, dataState }: { target: HTMLElement, dataState: DataManagement }) {
+        this.dState = dataState;
+        this.eventList = new EventList(dataState);
+
         this.section.className = 'term_area';
-
         target.appendChild(this.section);
         this.render();
     }
 
     render() {
+        this.eventList.sockEvent.openSocket();
         this.openTerminal();
         this.initTerminal();
     }
@@ -49,16 +54,18 @@ export default class Term {
 
     addEvent() {
         let term = this.getTerm();
-        this.eventList.termEvent.setOnKey(term);
+        let sock = this.eventList.sockEvent.socket;
+
+        this.eventList.termEvent.setOnKey(term, sock);
 
 
 
     }
 
-    readyToConnect(ip: String) {
+    readyToConnect(ip: string) {
         let term = this.getTerm();
         let AccountTermString: string = 'Login as: ';
-        this.backSpaceLimit = AccountTermString.length;
+        this.dState.backLimit = AccountTermString.length;
 
         term.writeln(`connect to ${ip}`);
         term.write(AccountTermString);

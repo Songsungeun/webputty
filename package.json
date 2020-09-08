@@ -20,9 +20,15 @@
   },
   "homepage": "https://github.com/Songsungeun/webputty#readme",
   "dependencies": {
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.6.4",
+    "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.33",
+    "@types/ssh2": "^0.5.44",
     "express": "^4.17.1",
     "socket.io": "^2.3.0",
+    "ssh2": "^0.8.9",
+    "ts-node": "^9.0.0",
     "xterm": "^4.8.1",
     "xterm-addon-fit": "^0.4.0"
   },
