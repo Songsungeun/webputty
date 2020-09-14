@@ -30,11 +30,19 @@ class TerminalEvent {
 
     setOnKey(term: Terminal, sock: SocketIOClient.Socket) {
         this.termOnKey = term.onKey(({ key, domEvent }) => {
-
             if (key === '\u007F') {
                 if (term.buffer.active.cursorX > data.backLimit) {
                     term.write('\b \b');
+                    if (data.typingState === TypingType.ACCOUNT) {
+                        this._account = this._account.slice(0, -1);
+                    }
                 }
+
+                if (data.typingState === TypingType.PASSWORD) {
+                    this._pw = this._pw.slice(0, -1);
+                }
+
+                return;
             }
             if (domEvent.key === 'Enter') {
                 console.log(data.typingState);
@@ -64,6 +72,19 @@ class TerminalEvent {
             }
 
         })
+        sock.on('login_success', () => {
+            console.log('login_success');
+            term.writeln('');
+            this.termOnKey?.dispose();
+            this.setOnData(term, sock);
+        })
+    }
+
+    setOnData(term: Terminal, sock: SocketIOClient.Socket) {
+        let onData = term.onData(e => {
+            console.log('onData');
+            sock.emit('send_buff', e);
+        })
     }
 }
 
@@ -83,9 +104,11 @@ class SockEvent {
         this.socket = io();
     }
 
-    addEvent(evName: string, action: (data: any) => {}) {
+    addOnEvent(evName: string, action: (data: string) => {}) {
         if (!this._socket) throw new Error('socket is not opened');
-        this._socket.on(evName, action);
+        this._socket.on(evName, (data: string) => {
+            action(data);
+        });
     }
 }
 

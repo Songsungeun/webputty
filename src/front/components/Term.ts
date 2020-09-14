@@ -44,6 +44,7 @@ export default class Term {
         terminal.loadAddon(fitAddon);
         terminal.open(this.section);
         fitAddon.fit();
+        terminal.focus();
     }
 
     initTerminal() {
@@ -57,6 +58,11 @@ export default class Term {
         let sock = this.eventList.sockEvent.socket;
 
         this.eventList.termEvent.setOnKey(term, sock);
+
+        this.eventList.sockEvent.addOnEvent('res_buff', (data: string) => {
+            term.write(data);
+            return 0;
+        });
 
 
 

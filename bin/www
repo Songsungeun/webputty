@@ -9,7 +9,21 @@ server.listen(3000, () => console.log('Server Start Port:3000'));
 io.on('connection', (socket) => {
     socket.on('req_auth', async ({ id, ip, pw }) => {
         console.log('req auth');
-        const client = await ssh.connect(id, ip, pw);
-        console.log('test');
+        const client = await ssh.connect(id, ip, pw, socket);
+        const stream = await ssh.getShell(client);
+
+        if (stream) {
+            socket.emit('login_success');
+        }
+        stream.on('data', (data) => {
+            socket.emit('res_buff', `${data}`);
+        })
+
+        socket.on('send_buff', (data) => {
+            console.log(`${data}`);
+            stream.write(data);
+        })
+
+
     })
 })
