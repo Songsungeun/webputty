@@ -15,14 +15,28 @@ io.on('connection', (socket) => {
         if (stream) {
             socket.emit('login_success');
         }
+
+        // receive data from server
         stream.on('data', (data) => {
             socket.emit('res_buff', `${data}`);
         })
 
+        stream.on('close', () => {
+            client && client.end();
+        })
+
+        // receive data from client
         socket.on('send_buff', (data) => {
             console.log(`${data}`);
             stream.write(data);
         })
+
+        // refresh
+        socket.on('refresh', () => {
+            client && client.end();
+        })
+
+
 
 
     })

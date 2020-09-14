@@ -46,6 +46,11 @@ export default class Term {
         this.dState.termSize = fitAddon.proposeDimensions(); // server에 terminal Size 알려주기 위해 별도 저장
         fitAddon.fit();
         terminal.focus();
+
+        // 새로고침시 이전의 session을 끊기 위해 refresh event 등록
+        window.onbeforeunload = () => {
+            this.eventList.sockEvent.socket.emit('refresh');
+        }
     }
 
     initTerminal() {
@@ -64,9 +69,6 @@ export default class Term {
             term.write(data);
             return 0;
         });
-
-
-
     }
 
     readyToConnect(ip: string) {
