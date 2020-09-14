@@ -1,16 +1,15 @@
 const client = require('ssh2').Client;
 
 exports.ssh = {
-    connect: (id, ip, socket) => {
-        console.log(id);
-        console.log(ip);
+    connect: (id, ip, pw, socket) => {
         let connectOption = {
             host: ip,
             username: id,
             port: 22,
             tryKeyboard: true,
             readyTimeout: 30 * 1000,
-            debug: console.log
+            debug: console.log,
+            password: pw
         }
 
         return new Promise((resolve, reject) => {
@@ -23,8 +22,6 @@ exports.ssh = {
                 })
 
                 conn.on('keyboard-interactive', (name, instructions, lang, prompts, finish) => {
-                    console.log('keyboard=====================================');
-                    console.log(prompts);
                 })
 
                 conn.on('error', err => {
@@ -34,6 +31,20 @@ exports.ssh = {
 
             } catch (e) {
                 console.log(e);
+            }
+        })
+    },
+
+    getShell: (client) => {
+        return new Promise((resolve, reject) => {
+            try {
+                client.shell((err, stream) => {
+                    if (err) reject(err);
+                    resolve(stream);
+                })
+            } catch (e) {
+                console.log(e);
+                reject(e);
             }
         })
     }
