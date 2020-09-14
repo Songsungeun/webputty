@@ -8,6 +8,7 @@ export class DataManagement {
     private _backSpaceLimit: number = 0;
     private _typingStatus: TypingType = TypingType.ACCOUNT;
     private _ip: string = '127.0.0.1';
+    private _termSize: object | null = null;
 
     get backLimit(): number {
         return this._backSpaceLimit
@@ -29,6 +30,14 @@ export class DataManagement {
 
     set ip(ip: string) {
         this._ip = ip;
+    }
+
+    get termSize(): object {
+        return this._termSize as object;
+    }
+
+    set termSize(size: object) {
+        this._termSize = size;
     }
 
 }

@@ -43,6 +43,7 @@ export default class Term {
         const fitAddon = new FitAddon();
         terminal.loadAddon(fitAddon);
         terminal.open(this.section);
+        this.dState.termSize = fitAddon.proposeDimensions(); // server에 terminal Size 알려주기 위해 별도 저장
         fitAddon.fit();
         terminal.focus();
     }
@@ -57,7 +58,7 @@ export default class Term {
         let term = this.getTerm();
         let sock = this.eventList.sockEvent.socket;
 
-        this.eventList.termEvent.setOnKey(term, sock);
+        this.eventList.termEvent.setOnKey(term, sock, this.dState.termSize);
 
         this.eventList.sockEvent.addOnEvent('res_buff', (data: string) => {
             term.write(data);

@@ -7,10 +7,10 @@ const ssh = require('../src/server/ssh').ssh;
 server.listen(3000, () => console.log('Server Start Port:3000'));
 
 io.on('connection', (socket) => {
-    socket.on('req_auth', async ({ id, ip, pw }) => {
-        console.log('req auth');
+    socket.on('req_auth', async ({ id, ip, pw, size }) => {
+        console.log(size);
         const client = await ssh.connect(id, ip, pw, socket);
-        const stream = await ssh.getShell(client);
+        const stream = await ssh.getShell(client, size);
 
         if (stream) {
             socket.emit('login_success');

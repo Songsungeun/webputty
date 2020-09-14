@@ -28,7 +28,7 @@ class TerminalEvent {
         return this._pw;
     }
 
-    setOnKey(term: Terminal, sock: SocketIOClient.Socket) {
+    setOnKey(term: Terminal, sock: SocketIOClient.Socket, size: object) {
         this.termOnKey = term.onKey(({ key, domEvent }) => {
             if (key === '\u007F') {
                 if (term.buffer.active.cursorX > data.backLimit) {
@@ -54,8 +54,7 @@ class TerminalEvent {
                 }
 
                 if (data.typingState === TypingType.PASSWORD) {
-                    console.log(data.ip, this._account, this._pw);
-                    sock.emit('req_auth', { id: this._account, ip: data.ip, pw: this._pw });
+                    sock.emit('req_auth', { id: this._account, ip: data.ip, pw: this._pw, size: size });
                 }
             }
 
@@ -82,7 +81,6 @@ class TerminalEvent {
 
     setOnData(term: Terminal, sock: SocketIOClient.Socket) {
         let onData = term.onData(e => {
-            console.log('onData');
             sock.emit('send_buff', e);
         })
     }

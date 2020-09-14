@@ -35,10 +35,10 @@ exports.ssh = {
         })
     },
 
-    getShell: (client) => {
+    getShell: (client, size) => {
         return new Promise((resolve, reject) => {
             try {
-                client.shell((err, stream) => {
+                client.shell(size, (err, stream) => {
                     if (err) reject(err);
                     resolve(stream);
                 })
