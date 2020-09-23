@@ -1,5 +1,5 @@
 export default class LocalStorage {
-    findOne(key: string) {
+    findOneL(key: string) {
         const value = localStorage.getItem(key);
         return value;
     }
@@ -7,6 +7,18 @@ export default class LocalStorage {
     findAll() {
         const list = { ...localStorage };
         return list;
+    }
+
+    findAllArray() {
+        let localData = this.findAll();
+        let keys = Object.keys(this.findAll());
+        return keys.map(key => {
+            return localData[key];
+        });
+    }
+
+    getLength() {
+        return Object.keys(this.findAll()).length;
     }
 
     setItem(key: string, value: string) {

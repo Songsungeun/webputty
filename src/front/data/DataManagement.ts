@@ -1,10 +1,12 @@
+import LocalStorage from "../utils/LocalStorage";
+
 export enum TypingType {
     ACCOUNT,
     PASSWORD,
     DATA
 }
 
-export class DataManagement {
+export class DataManagement extends LocalStorage {
     private _backSpaceLimit: number = 0;
     private _typingStatus: TypingType = TypingType.ACCOUNT;
     private _ip: string = '127.0.0.1';
