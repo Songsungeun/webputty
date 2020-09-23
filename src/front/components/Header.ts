@@ -1,9 +1,17 @@
 import { DataManagement } from "../data/DataManagement";
 
+interface IOpenTerminalEventList {
+    save: HTMLInputElement,
+    con: HTMLButtonElement,
+    nick: HTMLInputElement,
+    ip: HTMLInputElement
+}
+
 // SECTION - Header
 export default class Header {
     section = document.createElement('header');
     onClick: Function
+    isSave: boolean = false;
 
     constructor({ target, dataState, onClick }: { target: HTMLElement, dataState: DataManagement, onClick: Function }) {
         this.section.className = 'header';
@@ -26,9 +34,6 @@ export default class Header {
         const ipInput = document.createElement('input');
         ipInput.placeholder = 'IP Address';
         ipInput.classList.add('header_item', 'bg-gray1', 'ip_input');
-        ipInput.addEventListener('keypress', (ev) => {
-            if (ev.key === 'Enter') this.onClick(ipInput.value);
-        });
         headerItem.appendChild(ipInput);
 
         // NOTE - 접속버튼 생성 및 이벤트 등록
@@ -36,23 +41,58 @@ export default class Header {
         connectBtn.classList.add('header_item', 'connect_btn');
         connectBtn.innerText = 'Connect!';
 
-        // NOTE - Connect Btn 클릭시 Terminal로 ip Addr 전달
-        connectBtn.addEventListener('click', () => { this.onClick(ipInput.value) });
         headerItem.appendChild(connectBtn);
 
         // NOTE - 닉네임으로 저장 체크
         const nickNamebox = document.createElement('div');
         nickNamebox.classList.add('nickname');
-        const saveNickNameCheck = document.createElement('input');
-        saveNickNameCheck.type = 'checkbox';
-        const saveNickNameInput = document.createElement('input');
-        saveNickNameInput.placeholder = 'Save as Server Name';
-        saveNickNameInput.classList.add('header_item', 'bg-floral', 'nickname_input');
-        nickNamebox.appendChild(saveNickNameCheck);
-        nickNamebox.appendChild(saveNickNameInput);
+
+        const saveCheck = document.createElement('input');
+        saveCheck.type = 'checkbox';
+
+        const nickName = document.createElement('input');
+        nickName.placeholder = 'Save as Server Name';
+        nickName.classList.add('header_item', 'bg-floral', 'nickname_input');
+
+        const connectEventList: IOpenTerminalEventList = {
+            save: saveCheck,
+            con: connectBtn,
+            nick: nickName,
+            ip: ipInput
+        }
+        this.addConnectEvent(connectEventList);
+
+        // HTML Append Child (saveNickNameCheck, saveNickNameInput) => nickNamebox => headerItem 
+        nickNamebox.appendChild(saveCheck);
+        nickNamebox.appendChild(nickName);
         headerItem.appendChild(nickNamebox);
 
         this.section.appendChild(headerItem);
+    }
+
+    // TODO - 리팩토링 필요.
+    addConnectEvent(openEventList: IOpenTerminalEventList) {
+        let { save, con, nick, ip } = openEventList;
+
+        // NOTE - Terminal Open Event 필요한 Element들 Add Event
+        save.addEventListener('click', () => { this.isSave = save.checked; });
+
+        con.addEventListener('click', () => { this.onClick(ip.value, this.isSave, nick.value) });
+
+        nick.addEventListener('keypress', (ev) => {
+            // servername 영역에서 enter 이벤트 발생시에는 ip 적혀있는지 체크
+            if (ev.key === 'Enter') {
+                if (!ip.value) {
+                    alert('IP를 입력해주세요.');
+                    return;
+                }
+                this.onClick(ip.value, this.isSave, nick.value)
+            }
+        });
+
+        ip.addEventListener('keypress', (ev) => {
+            if (ev.key === 'Enter') this.onClick(ip.value, this.isSave, nick.value);
+        });
     }
 }
 // !SECTION
