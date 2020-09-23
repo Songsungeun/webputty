@@ -8,7 +8,7 @@ header {
     padding-left: 3rem;
     padding-right: 3rem;
     border-bottom: 2px double rosybrown;
-    box-shadow: 10px 10px 30px #000808;
+    box-shadow: 5px 1px 5px 1px #000808;
     
 }
 
@@ -47,6 +47,10 @@ header {
     background-color: #f1f3f5;
 }
 
+.bg-floral {
+    background-color: floralwhite;
+}
+
 .header_itemBox {
     max-width: 95.36743rem;
     /* border: 1px solid blue; */
@@ -78,4 +82,25 @@ header {
     font-size: 15px;
     cursor: pointer;
     border-radius: 10px;;
+}
+
+.side_nav {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 55px;
+    right: 0;
+    /* background-color: #111; */
+    overflow-x: hidden;
+    padding-top: 20px;
+    border: 1px solid blue;
+}
+
+.nickname_input {
+    margin-left: 10px;
+}
+
+.term_area {
+    width: 84.5%;
 }

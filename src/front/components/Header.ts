@@ -40,6 +40,18 @@ export default class Header {
         connectBtn.addEventListener('click', () => { this.onClick(ipInput.value) });
         headerItem.appendChild(connectBtn);
 
+        // NOTE - 닉네임으로 저장 체크
+        const nickNamebox = document.createElement('div');
+        nickNamebox.classList.add('nickname');
+        const saveNickNameCheck = document.createElement('input');
+        saveNickNameCheck.type = 'checkbox';
+        const saveNickNameInput = document.createElement('input');
+        saveNickNameInput.placeholder = 'Save as Server Name';
+        saveNickNameInput.classList.add('header_item', 'bg-floral', 'nickname_input');
+        nickNamebox.appendChild(saveNickNameCheck);
+        nickNamebox.appendChild(saveNickNameInput);
+        headerItem.appendChild(nickNamebox);
+
         this.section.appendChild(headerItem);
     }
 }
