@@ -89,11 +89,10 @@ header {
     width: 15%;
     position: fixed;
     z-index: 1;
-    top: 55px;
+    /* top: 55px; */
     right: 0;
     /* background-color: #111; */
     overflow-x: hidden;
-    padding-top: 20px;
     border: 1px solid blue;
 }
 
@@ -104,3 +103,31 @@ header {
 .term_area {
     width: 84.5%;
 }
+
+.iplist {
+    padding: 0;
+    margin: 0;
+}
+ul.iplist li {
+    padding: 5px 0px 5px 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    padding-left: 15px;
+    border: 2px solid #efefef;
+    font-size: 12px;
+    list-style: none;
+    max-width: 250px;
+    width: 100%;
+}
+
+ul.iplist li:hover {
+    background-color: #f1f3f5;
+    cursor: pointer;
+}
+
+.ipitem {
+    font-size: inherit;
+    font-weight: bold;
+    color: cornflowerblue;
+}
+
